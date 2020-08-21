@@ -71,6 +71,7 @@ public class PersonDaoImpl {
         return 0;
     }
 
+    //根据id查是否存在
     public Person select(int id){
         Connection connection=null;
         PreparedStatement preparedStatement=null;
@@ -105,6 +106,49 @@ public class PersonDaoImpl {
         }
         return null;
     }
+
+
+
+    //根据name查是否存在
+    public Person select(String name){
+        Connection connection=null;
+        PreparedStatement preparedStatement=null;
+        ResultSet resultSet=null;
+        String sql="select * from person where name=?";
+        Person person=null;
+        try {
+            connection=DBUtils.getConnection();
+            preparedStatement=connection.prepareStatement(sql);
+            preparedStatement.setString(1,name);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                person=new Person();
+                int pid=resultSet.getInt("id");
+                String pname=resultSet.getString("name");
+                int age=resultSet.getInt("age");
+                Date bornDate=resultSet.getDate("bornDate");
+                String email=resultSet.getString("email");
+                String address=resultSet.getString("address");
+                person.setId(pid);
+                person.setName(name);
+                person.setAge(age);
+                person.setBornDate(bornDate);
+                person.setEmail(email);
+                person.setAddress(address);
+            }
+            return person;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }finally {
+            DBUtils.closeAll(connection,preparedStatement,resultSet);
+        }
+        return null;
+    }
+
+
+
+
+
 
     //查询 所有
     public List<Person> selectAll(){
