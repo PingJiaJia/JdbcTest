@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class accountDao {
+public class AccountDaoImpl {
     public int insert(Account account){ return 0;}
     public int delete(String cardNo){ return 0;}
     public int update(Account account){
@@ -19,6 +19,7 @@ public class accountDao {
             preparedStatement.setString(1,account.getPassword());
             preparedStatement.setString(2,account.getName());
             preparedStatement.setDouble(3,account.getBalance());
+            preparedStatement.setString(4,account.getCardNo());
             int result=preparedStatement.executeUpdate();
             return result;
         } catch (SQLException throwables) {

@@ -24,8 +24,8 @@ public class DBUtils {
 
      public static Connection getConnection(){
          try {
-             Connection connection= DriverManager.getConnection(PROPERTIES.getProperty("url"),PROPERTIES.getProperty("user"),PROPERTIES.getProperty("password"));
-             return null;
+            Connection connection= DriverManager.getConnection(PROPERTIES.getProperty("url"),PROPERTIES.getProperty("username"),PROPERTIES.getProperty("password"));
+             return connection;
          } catch (SQLException throwables) {
              throwables.printStackTrace();
          }
