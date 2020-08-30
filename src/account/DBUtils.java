@@ -9,7 +9,7 @@ import java.util.Properties;
 
 public class DBUtils {
      private static final Properties PROPERTIES=new Properties();
-
+     private static final ThreadLocal<Connection> threadLocal=new ThreadLocal<>();
      static {
          InputStream inputStream=DBUtils.class.getResourceAsStream("/db.properties");
          try {
@@ -23,8 +23,13 @@ public class DBUtils {
      }
 
      public static Connection getConnection(){
+         Connection connection=threadLocal.get();   //将当前线程中绑定的Connection对象，赋值给connection
          try {
-            Connection connection= DriverManager.getConnection(PROPERTIES.getProperty("url"),PROPERTIES.getProperty("username"),PROPERTIES.getProperty("password"));
+             if (connection==null){
+                 connection= DriverManager.getConnection(PROPERTIES.getProperty("url"),PROPERTIES.getProperty("username"),PROPERTIES.getProperty("password"));
+                 threadLocal.set(connection);    //把连接存在当前线程共享中
+             }
+
              return connection;
          } catch (SQLException throwables) {
              throwables.printStackTrace();

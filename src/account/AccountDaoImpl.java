@@ -25,7 +25,7 @@ public class AccountDaoImpl {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }finally {
-            DBUtils.closeAll(connection,preparedStatement,null);
+            DBUtils.closeAll(null,preparedStatement,null);
         }
 
         return 0;
