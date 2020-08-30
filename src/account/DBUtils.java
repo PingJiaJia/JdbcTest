@@ -47,13 +47,50 @@ public class DBUtils {
              }
              if (connection!=null){
                  connection.close();
+                 threadLocal.remove();   //关闭连接后，移除已关闭connection对象
              }
          } catch (SQLException throwables) {
              throwables.printStackTrace();
          }
 
-
      }
+
+
+    //开启事务
+    public static void begin(){
+        try {
+            Connection connection=getConnection();
+            connection.setAutoCommit(false);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    //提交事务
+    public static void commit(){
+        Connection connection=null;
+        try {
+            connection=getConnection();
+            connection.commit();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }finally {
+            closeAll(connection,null,null);
+        }
+    }
+
+    //回滚事务
+    public static void rollback(){
+        Connection connection=null;
+        try {
+            connection=getConnection();
+            connection.rollback();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }finally {
+            closeAll(connection,null,null);
+        }
+    }
 
 
 }

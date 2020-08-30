@@ -8,10 +8,9 @@ public class AccountServiceImpl {
         AccountDaoImpl accountDao = new AccountDaoImpl();
         //2.组织完善业务功能
         //2.1 验证fromNo是否存在
-        Connection connection=null;
         try {
-            connection=DBUtils.getConnection();
-            connection.setAutoCommit(false);
+            //调用DBUtils开启事务
+            DBUtils.begin();
             Account account = accountDao.select(fromNo);
             if (account==null){
                 throw new RuntimeException("卡号不存在！");
@@ -42,18 +41,13 @@ public class AccountServiceImpl {
             accountDao.update(toAccount);
             System.out.println("转账成功！");
             //转账成功！则整个事务提交！
-            connection.commit();
+            DBUtils.commit();
 
         } catch (RuntimeException e) {
             System.out.println("转账失败！");
-            try {
-                connection.rollback();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
+
+                DBUtils.rollback();
             e.printStackTrace();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
 
 
